@@ -1,8 +1,14 @@
-import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { game, initialState } from './game'
+import {
+  combineReducers,
+  configureStore,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit'
+import { gameSlice, initialState as gameInitialState } from './game'
+import { uiSlice, initialState as uiInitialState } from './ui'
 
 export const rootReducer = combineReducers({
-  [game.name]: game.reducer,
+  [gameSlice.name]: gameSlice.reducer,
+  [uiSlice.name]: uiSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
@@ -17,4 +23,7 @@ const configureAppStore = (preloadedState: RootState) => {
   return store
 }
 
-export const store = configureAppStore({ game: initialState })
+export const store = configureAppStore({
+  [gameSlice.name]: gameInitialState,
+  [uiSlice.name]: uiInitialState,
+})

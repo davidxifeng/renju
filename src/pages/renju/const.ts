@@ -30,7 +30,7 @@ export const GRID_GAP = 45
 export const TAG_RADIUS = 8
 
 // 棋子半径
-export const CHESS_RADIUS = 20
+export const CHESS_RADIUS = 16
 
 // 棋子上的文本宽度
 export const ChessTextWidth = 30
