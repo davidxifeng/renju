@@ -15,11 +15,14 @@
 2194 1234:      3840 2160 with 175% scale
 */
 
-// 棋盘显示大小
-export const STAGE_WIDTH = 640
-export const STAGE_HEIGHT = 480
-
 // 棋盘大小
 export const BOARD_ROW_COUNT = 15
 export const BOARD_COLUMN_COUNT = 15
 
+// 棋盘显示大小
+export const STAGE_WIDTH = 640
+export const STAGE_HEIGHT = 480
+
+// 棋盘格子宽度
+export const GRID_GAP = 32
+export const TAG_RADIUS = 6
