@@ -11,8 +11,8 @@ import _ from 'underscore'
 
 const rowLineLength = (BOARD_COLUMN_COUNT - 1) * GRID_GAP
 const columnLineLength = (BOARD_ROW_COUNT - 1) * GRID_GAP
-const baseX = (STAGE_WIDTH - rowLineLength) / 2
-const baseY = (STAGE_HEIGHT - columnLineLength) / 2
+export const baseX = (STAGE_WIDTH - rowLineLength) / 2
+export const baseY = (STAGE_HEIGHT - columnLineLength) / 2
 
 const rowLinePoints = [0, 0, rowLineLength, 0]
 const columnLinePoints = [0, 0, 0, columnLineLength]
@@ -40,9 +40,10 @@ const tagPosList = [
   },
 ]
 
-export const Board = () => {
+export const BoardLayer = () => {
   return (
     <Layer listening={false}>
+      {/* 整个canvas的背景 */}
       <Rect
         x={0}
         y={0}
@@ -51,6 +52,7 @@ export const Board = () => {
         fill="antiquewhite"
         cornerRadius={16}
       />
+      {/* 横向的线 */}
       {_.range(BOARD_ROW_COUNT).map(value => (
         <Line
           key={value}
@@ -61,6 +63,7 @@ export const Board = () => {
           strokeWidth={1}
         />
       ))}
+      {/* 纵向的线 */}
       {_.range(BOARD_COLUMN_COUNT).map(value => (
         <Line
           key={value}
@@ -71,6 +74,7 @@ export const Board = () => {
           strokeWidth={1}
         />
       ))}
+      {/* 中心等特殊位置的标记 */}
       {tagPosList.map(({ x, y }, index) => (
         <Circle
           key={index}
