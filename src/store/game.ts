@@ -1,21 +1,55 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { logicalPosToIndex } from '../pages/renju/Chess'
+import { BOARD_COLUMN_COUNT, BOARD_ROW_COUNT } from '../pages/renju/const'
 import { Move, BoardPosition } from './types'
+import _ from 'underscore'
+
+export type PointStatus = 'black' | 'white' | 'empty'
+
+export type PointState = {
+  coordX: number
+  coordY: number
+  pointStatus: PointStatus
+  /**
+   * 0: 代表棋盘上初始已有的棋子，表示残局时使用
+   * 1 - N： 表示第N步时下的棋子
+   */
+  moveStep: number
+}
 
 export type GameData = {
   moveList: Move[]
+  pointStateList: PointState[]
+  nextMoveStep: number
+}
+
+const buildPointStateList = (moveList: Move[]) => {
+  const pointStateList: PointState[] = _.range(BOARD_ROW_COUNT)
+    .map(y =>
+      _.range(BOARD_COLUMN_COUNT).map(x => ({
+        coordX: x + 1,
+        coordY: y + 1,
+        pointStatus: 'empty' as PointStatus,
+        moveStep: 0,
+      })),
+    )
+    .flat()
+  for (const move of moveList) {
+    const {
+      serial,
+      position: { x, y },
+    } = move
+    const pointState = pointStateList[logicalPosToIndex(x, y)]
+    pointState.moveStep = serial
+    pointState.pointStatus = serial % 2 === 0 ? 'white' : 'black'
+  }
+  return pointStateList
 }
 
 export const initialState: GameData = {
   moveList: [],
-}
-
-const isCoordinateEmpty = (coord: BoardPosition, moveList: Move[]) => {
-  for (const { position } of moveList) {
-    if (position.x === coord.x && position.y === coord.y) {
-      return false
-    }
-  }
-  return true
+  pointStateList: buildPointStateList([]),
+  nextMoveStep: 1,
 }
 
 export const gameSlice = createSlice({
@@ -25,11 +59,16 @@ export const gameSlice = createSlice({
     placeChessAt(state, action: PayloadAction<BoardPosition>) {
       const pos = action.payload
       const serial = state.moveList.length + 1
-      if (isCoordinateEmpty(pos, state.moveList)) {
+      const index = logicalPosToIndex(pos.x, pos.y)
+      const isPointEmpty = state.pointStateList[index].pointStatus === 'empty'
+      if (isPointEmpty) {
         state.moveList.push({
           serial: serial,
           position: action.payload,
         })
+        const pointState = state.pointStateList[index]
+        pointState.pointStatus = serial % 2 === 0 ? 'white' : 'black'
+        pointState.moveStep = serial
       }
     },
   },

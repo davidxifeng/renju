@@ -13,8 +13,7 @@ export const KonvaStage = () => {
   const dispatch = useDispatch()
   const onBoardClick = React.useCallback(
     (event: KonvaEventObject<MouseEvent>) => {
-      const stage = event.target.getStage()
-      const pos = stage?.getPointerPosition()
+      const pos = event.target.getStage()?.getPointerPosition()
       if (pos != null) {
         const r = stageMousePositionToChessCoordinate(pos)
         if (r !== false) {
@@ -33,6 +32,7 @@ export const KonvaStage = () => {
             width={STAGE_WIDTH}
             height={STAGE_HEIGHT}
             onClick={onBoardClick}
+            onTap={onBoardClick}
           >
             <ReactReduxContext.Provider value={context}>
               <BoardLayer />

@@ -1,4 +1,6 @@
+import React from 'react'
 import _ from 'underscore'
+import { useSelector } from 'react-redux'
 import { Circle, Layer, Text } from 'react-konva'
 import {
   BOARD_COLUMN_COUNT,
@@ -8,11 +10,10 @@ import {
   CHESS_RADIUS,
   GRID_GAP,
 } from './const'
-import { RootState } from '../../store'
-import { useSelector } from 'react-redux'
-import { baseX, baseY } from './Board'
-import React from 'react'
 import { Vector2d } from 'konva/types/types'
+
+import { RootState } from '../../store'
+import { baseX, baseY } from './Board'
 import { BoardPosition } from '../../store/types'
 
 export const chessPositionList = _.range(BOARD_ROW_COUNT)
@@ -33,10 +34,11 @@ export const chessPositionList = _.range(BOARD_ROW_COUNT)
  * @returns 棋盘位置list下标
  */
 export const logicalPosToIndex = (x: number, y: number): number => {
-  if (x < 1 || x > BOARD_COLUMN_COUNT || y < 1 || y > BOARD_ROW_COUNT) {
+  if (x >= 1 && x <= BOARD_COLUMN_COUNT && y >= 1 && y <= BOARD_ROW_COUNT) {
+    return (y - 1) * BOARD_ROW_COUNT + x - 1
+  } else {
     throw new Error(`bad logical chess position: ${x} ${y}`)
   }
-  return (y - 1) * BOARD_ROW_COUNT + x - 1
 }
 
 export const uiPositionFromLogicalPos = (x: number, y: number) => {
