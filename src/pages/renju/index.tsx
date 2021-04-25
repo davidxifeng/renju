@@ -1,13 +1,14 @@
+import React from 'react'
 import { ReactReduxContext, useDispatch } from 'react-redux'
-import { Stage } from 'react-konva'
 import { Flex } from '@chakra-ui/react'
+import { Stage } from 'react-konva'
+import { KonvaEventObject } from 'konva/types/Node'
 
 import { BoardLayer } from './Board'
 import { STAGE_WIDTH, STAGE_HEIGHT } from './const'
-import { ChessLayer, stageMousePositionToChessCoordinate } from './Chess'
-import React from 'react'
-import { KonvaEventObject } from 'konva/types/Node'
+import { ChessLayer} from './Chess'
 import { gameActions } from '../../store/game'
+import { stageMousePositionToChessCoordinate } from './functions'
 
 export const KonvaStage = () => {
   const dispatch = useDispatch()

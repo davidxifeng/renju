@@ -1,7 +1,7 @@
-import { logicalPosToIndex } from "../pages/renju/Chess"
 import { BOARD_COLUMN_COUNT, BOARD_ROW_COUNT } from "../pages/renju/const"
 import { BoardPosition, Move } from "./types"
 import _ from 'underscore'
+import { boardPosToIndex } from "../pages/renju/functions"
 
 export type PointState = {
   coordX: number
@@ -27,7 +27,7 @@ export const buildPointStateList = (moveList: Move[]) => {
     .flat()
   for (const move of moveList) {
     const { moveStep, boardX, boardY, isBlack: chess, } = move
-    const pointState = pointStateList[logicalPosToIndex(boardX, boardY)]
+    const pointState = pointStateList[boardPosToIndex(boardX, boardY)]
     pointState.moveStep = moveStep
     pointState.isBlack = chess
   }
