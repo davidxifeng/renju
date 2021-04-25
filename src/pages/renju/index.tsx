@@ -25,7 +25,7 @@ export const KonvaStage = () => {
   )
 
   return (
-    <Flex justifyContent="center" padding={1}>
+    <Flex justifyContent="center" padding={0}>
       <ReactReduxContext.Consumer>
         {context => (
           <Stage
