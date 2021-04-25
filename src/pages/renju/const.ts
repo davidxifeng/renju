@@ -1,9 +1,12 @@
 const boardScale = Math.min(window.innerWidth, window.innerHeight) / 375
 
-
 // 棋盘大小
-export const BOARD_ROW_COUNT = 15
-export const BOARD_COLUMN_COUNT = 15
+const SUITABLE_BOARD_SIZE = [7, 11, 15, 19]
+
+const BOARD_SIZE_INDEX = 2
+
+export const BOARD_ROW_COUNT = SUITABLE_BOARD_SIZE[BOARD_SIZE_INDEX]
+export const BOARD_COLUMN_COUNT = SUITABLE_BOARD_SIZE[BOARD_SIZE_INDEX]
 
 // 棋盘显示大小
 export const STAGE_WIDTH = Math.max(window.innerWidth, 375)

@@ -30,7 +30,6 @@ export const uiPositionFromLogicalPos = (x: number, y: number) => {
   return chessPositionList[boardPosToIndex(x, y)]
 }
 
-
 const moveListSelector = (state: RootState) => state.game.moveList
 
 export const ChessLayer = () => {
@@ -62,6 +61,19 @@ export const ChessLayer = () => {
                 align={'center'}
                 verticalAlign={'middle'}
                 fill={isBlack ? 'white' : 'black'}
+              />
+            )}
+            {false && (
+              <Text
+                text={`${boardX}-${boardY} (${boardX + boardY - 1}/${boardX + BOARD_ROW_COUNT - boardY + 1 - 1})`}
+                fontSize={ChessTextFontSize / 2}
+                x={px - ChessTextWidth / 2}
+                y={py - ChessTextWidth / 2 + 20}
+                width={ChessTextWidth * 2}
+                height={ChessTextWidth}
+                align={'center'}
+                verticalAlign={'middle'}
+                fill={isBlack ? '#ccc' : 'blue'}
               />
             )}
           </React.Fragment>

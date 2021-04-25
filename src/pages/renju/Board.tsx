@@ -1,4 +1,4 @@
-import { Layer, Line, Rect, Circle } from 'react-konva'
+import { Layer, Line, Rect, Circle, Text } from 'react-konva'
 import {
   BOARD_COLUMN_COUNT,
   BOARD_ROW_COUNT,
@@ -8,6 +8,7 @@ import {
   STAGE_WIDTH,
 } from './const'
 import _ from 'underscore'
+import React from 'react'
 
 const rowLineLength = (BOARD_COLUMN_COUNT - 1) * GRID_GAP
 const columnLineLength = (BOARD_ROW_COUNT - 1) * GRID_GAP
@@ -17,26 +18,29 @@ export const baseY = (STAGE_HEIGHT - columnLineLength) / 2
 const rowLinePoints = [0, 0, rowLineLength, 0]
 const columnLinePoints = [0, 0, 0, columnLineLength]
 
+const tagXU = (BOARD_COLUMN_COUNT + 1) / 4
+const tagYU = (BOARD_ROW_COUNT + 1) / 4
+
 const tagPosList = [
   {
-    x: ((BOARD_COLUMN_COUNT - 1) / 2) * GRID_GAP,
-    y: ((BOARD_ROW_COUNT - 1) / 2) * GRID_GAP,
+    x: (tagXU * 2 - 1) * GRID_GAP,
+    y: (tagYU * 2 - 1) * GRID_GAP,
   },
   {
-    x: 3 * GRID_GAP,
-    y: 3 * GRID_GAP,
+    x: (tagXU - 1) * GRID_GAP,
+    y: (tagYU - 1) * GRID_GAP,
   },
   {
-    x: (BOARD_COLUMN_COUNT - 3) * GRID_GAP,
-    y: 3 * GRID_GAP,
+    x: (tagXU * 3 - 1) * GRID_GAP,
+    y: (tagYU - 1) * GRID_GAP,
   },
   {
-    x: 3 * GRID_GAP,
-    y: (BOARD_ROW_COUNT - 3) * GRID_GAP,
+    x: (tagXU - 1) * GRID_GAP,
+    y: (tagYU * 3 - 1) * GRID_GAP,
   },
   {
-    x: (BOARD_COLUMN_COUNT - 3) * GRID_GAP,
-    y: (BOARD_ROW_COUNT - 3) * GRID_GAP,
+    x: (tagXU * 3 - 1) * GRID_GAP,
+    y: (tagYU * 3 - 1) * GRID_GAP,
   },
 ]
 
@@ -54,25 +58,45 @@ export const BoardLayer = () => {
       />
       {/* 横向的线 */}
       {_.range(BOARD_ROW_COUNT).map(value => (
-        <Line
-          key={value}
-          x={baseX}
-          y={value * GRID_GAP + baseY}
-          points={rowLinePoints}
-          stroke="#ccc"
-          strokeWidth={1}
-        />
+        <React.Fragment key={value}>
+          <Text
+            text={String(value + 1)}
+            fontSize={16}
+            x={baseX + rowLineLength + 16 / 2}
+            y={value * GRID_GAP + baseY - 16 / 2}
+            align={'center'}
+            verticalAlign={'middle'}
+            fill={'#38a169'}
+          />
+          <Line
+            x={baseX}
+            y={value * GRID_GAP + baseY}
+            points={rowLinePoints}
+            stroke="#ccc"
+            strokeWidth={1}
+          />
+        </React.Fragment>
       ))}
       {/* 纵向的线 */}
       {_.range(BOARD_COLUMN_COUNT).map(value => (
-        <Line
-          key={value}
-          x={value * GRID_GAP + baseX}
-          y={baseY}
-          points={columnLinePoints}
-          stroke="#ccc"
-          strokeWidth={1}
-        />
+        <React.Fragment key={value}>
+          <Text
+            text={String(value + 1)}
+            fontSize={16}
+            x={value * GRID_GAP + baseX - 16 / 2}
+            y={baseY + columnLineLength + 16 / 2}
+            align={'center'}
+            verticalAlign={'middle'}
+            fill={'#3182ce'}
+          />
+          <Line
+            x={value * GRID_GAP + baseX}
+            y={baseY}
+            points={columnLinePoints}
+            stroke="#ccc"
+            strokeWidth={1}
+          />
+        </React.Fragment>
       ))}
       {/* 中心等特殊位置的标记 */}
       {tagPosList.map(({ x, y }, index) => (
