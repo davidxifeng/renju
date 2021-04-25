@@ -1,16 +1,20 @@
 export type BoardPosition = {
   /**
-   * 棋盘横向位置， 范围 1 - N
+   * 棋盘横向坐标， 范围 1 - N
    */
-  x: number
+  boardX: number
 
   /**
-   * 棋盘纵向位置， 范围 1 - N
+   * 棋盘纵向坐标， 范围 1 - N
    */
-  y: number
+  boardY: number
 }
 
-export type Move = {
-  serial: number
-  position: BoardPosition
+export type Move = BoardPosition & {
+  /**
+   * 0: 棋盘上预置的棋子，残局时用
+   * 1 - N: 黑白双方轮流下的棋子步数
+   */
+  moveStep: number
+  isBlack: boolean
 }

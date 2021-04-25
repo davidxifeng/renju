@@ -83,8 +83,8 @@ export const stageMousePositionToChessCoordinate = (
       return false
     } else {
       return {
-        x: inGridX + 1,
-        y: inGridY + 1,
+        boardX: inGridX + 1,
+        boardY: inGridY + 1,
       }
     }
   } else {
@@ -100,42 +100,31 @@ export const ChessLayer = () => {
   return (
     <Layer>
       {moveList.map((value, index) => {
-        const {
-          serial,
-          position: { x, y },
-        } = value
-        const pos = uiPositionFromLogicalPos(x, y)
+        const { moveStep, boardX, boardY, isBlack } = value
+        const pos = uiPositionFromLogicalPos(boardX, boardY)
         const px = pos.px + baseX
         const py = pos.py + baseY
-        const isWhiteChess = serial % 2 === 0
         return (
           <React.Fragment key={index}>
             <Circle
               x={px}
               y={py}
-              fill={isWhiteChess ? 'white' : 'black'}
+              fill={isBlack ? 'black' : 'white'}
               radius={CHESS_RADIUS}
             />
-            {false && (
-              <Circle
-                x={px + GRID_GAP / 2}
-                y={py + GRID_GAP / 2}
-                fill={isWhiteChess ? 'white' : 'black'}
-                stroke="red"
-                radius={CHESS_RADIUS}
+            {moveStep > 0 && (
+              <Text
+                text={String(moveStep)}
+                fontSize={ChessTextFontSize}
+                x={px - ChessTextWidth / 2}
+                y={py - ChessTextWidth / 2}
+                width={ChessTextWidth}
+                height={ChessTextWidth}
+                align={'center'}
+                verticalAlign={'middle'}
+                fill={isBlack ? 'white' : 'black'}
               />
             )}
-            <Text
-              text={String(serial)}
-              fontSize={ChessTextFontSize}
-              x={px - ChessTextWidth / 2}
-              y={py - ChessTextWidth / 2}
-              width={ChessTextWidth}
-              height={ChessTextWidth}
-              align={'center'}
-              verticalAlign={'middle'}
-              fill={isWhiteChess ? 'black' : 'white'}
-            />
           </React.Fragment>
         )
       })}
