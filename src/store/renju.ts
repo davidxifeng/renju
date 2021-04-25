@@ -1,6 +1,7 @@
+import _ from 'underscore'
+
 import { BOARD_COLUMN_COUNT, BOARD_ROW_COUNT } from '../pages/renju/const'
 import { BoardPosition, Move } from './types'
-import _ from 'underscore'
 import { boardPosToIndex } from '../pages/renju/functions'
 
 export type PointState = {
@@ -48,11 +49,11 @@ export const isPointEmpty = (bp: BoardPosition, moveList: Move[]) => {
  * ZX: /斜线 编号范围 [1 ~ (row_count + column_count - 1)], 有效范围: [5 ~ max - 4]
  * ZY: \斜线 同上 坐标->编号 转换方法: x + (row_count - y + 1) - 1
  */
-export type LineSet = {
-  xLines: Set<number>
-  yLines: Set<number>
-  zxLines: Set<number>
-  zyLines: Set<number>
+export type LineChessInfo = {
+  rowLines: Map<number, Move[]>
+  columnLines: Map<number, Move[]>
+  zxLines: Map<number, Move[]>
+  zyLines: Map<number, Move[]>
 }
 
 const maxValidZ = BOARD_ROW_COUNT + BOARD_COLUMN_COUNT - 5
@@ -66,29 +67,100 @@ const normalizeZ = (x: number, y: number): number | false => {
   }
 }
 
-export const calcCheckLines = (moveList: Move[]) => {
-  const lineSet: LineSet = {
-    xLines: new Set(),
-    yLines: new Set(),
-    zxLines: new Set(),
-    zyLines: new Set(),
+export const groupChessesByLines = (moveList: Move[]): LineChessInfo => {
+  const lineSet: LineChessInfo = {
+    rowLines: new Map(),
+    columnLines: new Map(),
+    zxLines: new Map(),
+    zyLines: new Map(),
   }
-  for (const { boardX, boardY } of moveList) {
-    lineSet.xLines.add(boardY)
-    lineSet.yLines.add(boardX)
+  const { rowLines, columnLines, zxLines, zyLines } = lineSet
+  for (const move of moveList) {
+    const { boardX, boardY } = move
+    if (rowLines.has(boardY)) {
+      rowLines.get(boardY)?.push(move)
+    } else {
+      rowLines.set(boardY, [move])
+    }
+    if (columnLines.has(boardX)) {
+      columnLines.get(boardX)?.push(move)
+    } else {
+      columnLines.set(boardX, [move])
+    }
     const zx = normalizeZ(boardX, boardY)
     if (zx !== false) {
-      lineSet.zxLines.add(zx)
+      if (zxLines.has(zx)) {
+        zxLines.get(zx)?.push(move)
+      } else {
+        zxLines.set(zx, [move])
+      }
     }
     const zy = normalizeZ(boardX, BOARD_ROW_COUNT - boardY + 1)
     if (zy !== false) {
-      lineSet.zyLines.add(zy)
+      if (zyLines.has(zy)) {
+        zyLines.get(zy)?.push(move)
+      } else {
+        zyLines.set(zy, [move])
+      }
     }
-    console.log(`x: ${boardX} y: ${boardY} zx: ${zx} zy: ${zy}`)
   }
   return lineSet
 }
 
+/**
+ * 分析x轴线，暂时只检测5连
+ * @param rowLines
+ * @returns false, 或者5连的左侧起点
+ */
+const checkRowLine = (pointList: Move[]): false | Move => {
+
+  if (pointList.length < 5) {
+    return false
+  }
+  console.log('check same line points: ', pointList.map(v => `${v.moveStep} `).join())
+
+  pointList.sort((a, b) => a.boardX - b.boardX)
+
+  let prevValue = pointList[0]
+  let maxN = 1
+  for (let i = 1; i < pointList.length; i++) {
+    const currentValue = pointList[i]
+    if (
+      prevValue.isBlack === currentValue.isBlack &&
+      prevValue.boardX + 1 === currentValue.boardX
+    ) {
+      maxN += 1
+      if (maxN === 5) {
+        console.log('find five at: ', pointList[i - 4])
+        return pointList[i - 4]
+      }
+    } else {
+      maxN = 1
+    }
+    prevValue = currentValue
+  }
+
+  return false
+}
+
+const checkRowLines = (
+  rowLines: Map<number, Move[]>,
+): false | BoardPosition => {
+  // 暂时检查到一个时就停止
+  for (const value of rowLines.values()) {
+    const r = checkRowLine(value)
+    if (r !== false) {
+      return r
+    }
+  }
+  return false
+}
+
 export const isGameEnd = (moveList: Move[]): boolean => {
+  const lineInfo = groupChessesByLines(moveList)
+  if (checkRowLines(lineInfo.rowLines) !== false) {
+    return true
+  }
+
   return false
 }
