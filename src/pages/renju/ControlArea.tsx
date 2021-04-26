@@ -1,26 +1,34 @@
 import { Box, Button, Stack } from '@chakra-ui/react'
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { gameActions } from '../../store/game'
 import { uiActions } from '../../store/ui'
+import { gameSelector } from './Chess'
 
 export const ControlArea = () => {
   const dispatch = useDispatch()
+  const game = useSelector(gameSelector)
   return (
     <Box>
       <Stack spacing={2}>
-        <Button onClick={() => dispatch(gameActions.drawback())}>撤销</Button>
-        <Button onClick={() => dispatch(uiActions.toggleShowStep())}>
+        <Button size="sm" onClick={() => dispatch(gameActions.drawback())}>
+          撤销
+        </Button>
+        <Button size="sm" onClick={() => dispatch(uiActions.toggleShowStep())}>
           切换序号
         </Button>
-        <Button onClick={() => dispatch(uiActions.toggleShowPosInfo())}>
+        <Button
+          size="sm"
+          onClick={() => dispatch(uiActions.toggleShowPosInfo())}
+        >
           切换坐标
         </Button>
         <Button
+          size="sm"
           onClick={() => dispatch(gameActions.restart())}
           colorScheme="cyan"
+          disabled={game.checkResult === false}
         >
-          重新开始
+          新的开始
         </Button>
       </Stack>
     </Box>

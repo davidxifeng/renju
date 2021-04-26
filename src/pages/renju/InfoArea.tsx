@@ -1,13 +1,13 @@
 import { Alert, AlertIcon } from '@chakra-ui/react'
-import { Box } from '@chakra-ui/layout'
+import { Flex } from '@chakra-ui/layout'
 import { useSelector } from 'react-redux'
 import { gameSelector } from './Chess'
 
 export const InfoArea = () => {
   const game = useSelector(gameSelector)
   return (
-    <Box>
-      <Alert status={game.winner === 'nil' ? 'info' : 'success'}>
+    <Flex flexDir="row" justifyContent="center" justifyItems="center">
+      <Alert width="initial" status={game.winner === 'nil' ? 'info' : 'success'}>
         <AlertIcon />
         {game.winner === 'nil'
           ? '連珠'
@@ -16,11 +16,11 @@ export const InfoArea = () => {
           : '白胜'}
       </Alert>
       {game.winner === 'nil' && (
-        <Alert status={'success'}>
+        <Alert width="initial" status={'success'}>
           <AlertIcon />
           {game.isNextTurnBlack ? '黑' : '白'}
         </Alert>
       )}
-    </Box>
+    </Flex>
   )
 }
