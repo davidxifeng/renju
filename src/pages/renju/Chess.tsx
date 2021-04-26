@@ -14,7 +14,6 @@ import {
 import { RootState } from '../../store'
 import { baseX, baseY } from './Board'
 import { boardPosToIndex } from './functions'
-import { isGameEnd } from '../../store/renju'
 
 export const chessPositionList = _.range(BOARD_ROW_COUNT)
   .map(y =>
@@ -35,10 +34,6 @@ const moveListSelector = (state: RootState) => state.game.moveList
 
 export const ChessLayer = () => {
   const moveList = useSelector(moveListSelector)
-  React.useEffect(() => {
-    isGameEnd(moveList)
-
-  }, [moveList])
 
   return (
     <Layer>

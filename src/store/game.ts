@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { isPointEmpty } from './renju'
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
+import { checkNewFiveInGaming, isPointEmpty } from './renju'
 import { Move, BoardPosition } from './types'
 
 export type GameData = {
@@ -29,6 +29,8 @@ export const gameSlice = createSlice({
           boardY: movePos.boardY,
           isBlack: state.isNextTurnBlack,
         })
+
+        console.log(checkNewFiveInGaming(current(state.moveList), true))
 
         state.nextMoveStep += 1
         state.isNextTurnBlack = !state.isNextTurnBlack

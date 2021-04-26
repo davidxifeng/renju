@@ -18,3 +18,11 @@ export type Move = BoardPosition & {
   moveStep: number
   isBlack: boolean
 }
+
+/**
+ * X: 横线
+ * Y: 纵线
+ * ZX: /斜线 编号范围 [1 ~ (row_count + column_count - 1)], 有效范围: [5 ~ max - 4]
+ * ZY: \斜线 同上 坐标->编号 转换方法: x + (row_count - y + 1) - 1
+ */
+export type LineType = 'Row' | 'Column' | 'ZX' | 'ZY'
