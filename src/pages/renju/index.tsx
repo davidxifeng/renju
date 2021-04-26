@@ -1,47 +1,24 @@
-import React from 'react'
-import { ReactReduxContext, useDispatch } from 'react-redux'
-import { Flex } from '@chakra-ui/react'
-import { Stage } from 'react-konva'
-import { KonvaEventObject } from 'konva/types/Node'
+import { Flex, useMediaQuery } from '@chakra-ui/react'
 
-import { BoardLayer } from './Board'
-import { STAGE_WIDTH, STAGE_HEIGHT } from './const'
-import { ChessLayer} from './Chess'
-import { gameActions } from '../../store/game'
-import { stageMousePositionToChessCoordinate } from './functions'
+import { InfoArea } from './InfoArea'
+import { ControlArea } from './ControlArea'
+import { KonvaStage } from './Stage'
 
-export const KonvaStage = () => {
-  const dispatch = useDispatch()
-  const onBoardClick = React.useCallback(
-    (event: KonvaEventObject<MouseEvent>) => {
-      const pos = event.target.getStage()?.getPointerPosition()
-      if (pos != null) {
-        const r = stageMousePositionToChessCoordinate(pos)
-        if (r !== false) {
-          dispatch(gameActions.placeChessAt(r))
-        }
-      }
-    },
-    [dispatch],
-  )
+export const RenjuPage = () => {
+  const [isLandscape] = useMediaQuery('(orientation: landscape)')
 
   return (
-    <Flex justifyContent="center" padding={0}>
-      <ReactReduxContext.Consumer>
-        {context => (
-          <Stage
-            width={STAGE_WIDTH}
-            height={STAGE_HEIGHT}
-            onClick={onBoardClick}
-            onTap={onBoardClick}
-          >
-            <ReactReduxContext.Provider value={context}>
-              <BoardLayer />
-              <ChessLayer />
-            </ReactReduxContext.Provider>
-          </Stage>
-        )}
-      </ReactReduxContext.Consumer>
+    <Flex
+      padding={0}
+      alignItems="center"
+      bg={'gray.400'}
+      justifyContent="space-evenly"
+      flexDir={isLandscape ? 'row' : 'column'}
+      height="100vh"
+    >
+      <InfoArea />
+      <KonvaStage />
+      <ControlArea />
     </Flex>
   )
 }

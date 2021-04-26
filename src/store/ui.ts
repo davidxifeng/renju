@@ -1,18 +1,26 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { BoardPosition } from './types'
+import { createSlice } from '@reduxjs/toolkit'
 
 export type UIState = {
+  showStepOnChess: boolean
+  showChessPosInfo: boolean
 }
 
 export const initialState: UIState = {
+  showStepOnChess: true,
+  showChessPosInfo: false,
 }
 
 export const uiSlice = createSlice({
-    name: 'ui',
-    initialState,
-    reducers: {
-        clickOnBoard(state, action: PayloadAction<BoardPosition>) {
-            console.log('click on board: ', action.payload)
-        }
-    }
+  name: 'ui',
+  initialState,
+  reducers: {
+    toggleShowStep(state) {
+      state.showStepOnChess = !state.showStepOnChess
+    },
+    toggleShowPosInfo(state) {
+      state.showChessPosInfo = !state.showChessPosInfo
+    },
+  },
 })
+
+export const uiActions = uiSlice.actions

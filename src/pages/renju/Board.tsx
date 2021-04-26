@@ -61,10 +61,11 @@ export const BoardLayer = () => {
         <React.Fragment key={value}>
           <Text
             text={String(value + 1)}
-            fontSize={16}
-            x={baseX + rowLineLength + 16 / 2}
-            y={value * GRID_GAP + baseY - 16 / 2}
-            align={'center'}
+            fontSize={12}
+            x={baseX + rowLineLength}
+            y={value * GRID_GAP + baseY - 12 / 2}
+            align={'right'}
+            width={20}
             verticalAlign={'middle'}
             fill={'#38a169'}
           />
@@ -82,10 +83,11 @@ export const BoardLayer = () => {
         <React.Fragment key={value}>
           <Text
             text={String(value + 1)}
-            fontSize={16}
-            x={value * GRID_GAP + baseX - 16 / 2}
-            y={baseY + columnLineLength + 16 / 2}
+            fontSize={12}
+            x={value * GRID_GAP + baseX - 12}
+            y={baseY + columnLineLength + 6}
             align={'center'}
+            width={24}
             verticalAlign={'middle'}
             fill={'#3182ce'}
           />

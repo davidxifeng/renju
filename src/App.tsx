@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import { AboutPage } from './pages/about'
 import { HomePage } from './pages/home'
-import { KonvaStage } from './pages/renju'
+import { RenjuPage } from './pages/renju'
 import { store } from './store'
 
 const AppRoutes = {
@@ -18,7 +18,7 @@ export const App = () => (
       <BrowserRouter>
         <Switch>
           <Route exact path={AppRoutes.about} component={AboutPage}/>
-          <Route exact path={AppRoutes.renju} component={KonvaStage}/>
+          <Route exact path={AppRoutes.renju} component={RenjuPage}/>
           <Route path={AppRoutes.home} component={HomePage} />
         </Switch>
       </BrowserRouter>

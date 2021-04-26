@@ -236,10 +236,11 @@ const checkLines = (
   return false
 }
 
-export type CheckResult = {
-  lineType: LineType | false
-  startPos?: Move
+export type WinResult = {
+  lineType: LineType
+  startPos: Move
 }
+export type CheckResult = WinResult | false
 
 /**
  * 检测下棋过程中，是否产生了5连
@@ -284,5 +285,5 @@ export const checkNewFiveInGaming = (
     }
   }
 
-  return { lineType: false }
+  return false
 }

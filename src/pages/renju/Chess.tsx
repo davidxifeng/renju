@@ -30,10 +30,13 @@ export const uiPositionFromLogicalPos = (x: number, y: number) => {
   return chessPositionList[boardPosToIndex(x, y)]
 }
 
+export const gameSelector = (state: RootState) => state.game
 const moveListSelector = (state: RootState) => state.game.moveList
+const uiSelector = (state: RootState) => state.ui
 
 export const ChessLayer = () => {
   const moveList = useSelector(moveListSelector)
+  const ui = useSelector(uiSelector)
 
   return (
     <Layer>
@@ -50,7 +53,7 @@ export const ChessLayer = () => {
               fill={isBlack ? 'black' : 'white'}
               radius={CHESS_RADIUS}
             />
-            {moveStep > 0 && (
+            {moveStep > 0 && ui.showStepOnChess && (
               <Text
                 text={String(moveStep)}
                 fontSize={ChessTextFontSize}
@@ -63,9 +66,11 @@ export const ChessLayer = () => {
                 fill={isBlack ? 'white' : 'black'}
               />
             )}
-            {true && (
+            {ui.showChessPosInfo && (
               <Text
-                text={`${boardX}-${boardY} (${boardX + boardY - 1}/${boardX + BOARD_ROW_COUNT - boardY + 1 - 1})`}
+                text={`${boardX}-${boardY} (${boardX + boardY - 1}/${
+                  boardX + BOARD_ROW_COUNT - boardY + 1 - 1
+                })`}
                 fontSize={ChessTextFontSize / 2}
                 x={px - ChessTextWidth / 2}
                 y={py - ChessTextWidth / 2 + 20}
