@@ -4,6 +4,7 @@ import { BOARD_COLUMN_COUNT, BOARD_ROW_COUNT } from '../pages/renju/const'
 import { BoardPosition, LineType, Move } from './types'
 import { boardPosToIndex } from '../pages/renju/functions'
 
+
 export type PointState = {
   coordX: number
   coordY: number
@@ -34,6 +35,12 @@ export const buildPointStateList = (moveList: Move[]) => {
   return pointStateList
 }
 
+/**
+ * 检测坐标是否已经有落子
+ * @param bp 检测的位置
+ * @param moveList 落子list
+ * @returns 目标位置没有落子时返回true
+ */
 export const isPointEmpty = (bp: BoardPosition, moveList: Move[]) => {
   for (const { boardX, boardY } of moveList) {
     if (bp.boardX === boardX && bp.boardY === boardY) {

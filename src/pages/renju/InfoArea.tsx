@@ -1,7 +1,7 @@
 import { Alert, AlertIcon } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/layout'
 import { useSelector } from 'react-redux'
-import { gameSelector } from './Chess'
+import { gameSelector } from '../../store/selectors'
 
 export const InfoArea = () => {
   const game = useSelector(gameSelector)

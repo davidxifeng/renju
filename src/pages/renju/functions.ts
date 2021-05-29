@@ -1,7 +1,8 @@
-import { Vector2d } from 'konva/types/types'
+import Konva from 'konva'
+import _ from 'underscore'
 
 import { BoardPosition } from '../../store/types'
-import { baseX, baseY } from './Board'
+import { baseX, baseY } from './BoardLayer'
 import { BOARD_COLUMN_COUNT, BOARD_ROW_COUNT, CHESS_RADIUS, GRID_GAP } from './const'
 
 export const isPointOutOfCircle = (
@@ -21,7 +22,7 @@ export const isPointOutOfCircle = (
 }
 
 export const stageMousePositionToChessCoordinate = (
-  pos: Vector2d,
+  pos: Konva.Vector2d,
 ): BoardPosition | false => {
   const { x, y } = pos
   const offsetX = x + GRID_GAP / 2 - baseX
@@ -63,4 +64,19 @@ export const boardPosToIndex = (x: number, y: number): number => {
   } else {
     throw new Error(`bad logical chess position: ${x} ${y}`)
   }
+}
+
+const chessPositionList = _.range(BOARD_ROW_COUNT)
+  .map(y =>
+    _.range(BOARD_COLUMN_COUNT).map(x => ({
+      x,
+      y,
+      px: x * GRID_GAP,
+      py: y * GRID_GAP,
+    })),
+  )
+  .flat()
+
+export const uiPositionFromLogicalPos = (x: number, y: number) => {
+  return chessPositionList[boardPosToIndex(x, y)]
 }

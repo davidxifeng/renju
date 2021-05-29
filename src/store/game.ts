@@ -2,9 +2,30 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
 import { checkNewFiveInGaming, CheckResult, isPointEmpty } from './renju'
 import { Move, BoardPosition } from './types'
 
+/**
+ * AI: 人机对战模式
+ * Board: 棋盘only
+ */
+export type GameMode = 'AI' | 'Board'
+
+export type GameScene = 'Menu' | 'Gameing' | 'Result'
+
 export type GameData = {
+  gameScene: GameScene
+
+  gameMode: GameMode
+
+  /**
+   * 落子列表
+   */
   moveList: Move[]
+  /**
+   * 下一步的序号
+   */
   nextMoveStep: number
+  /**
+   * 下一步是否黑
+   */
   isNextTurnBlack: boolean
   winner: 'black' | 'white' | 'nil'
   checkResult: CheckResult
@@ -13,6 +34,8 @@ export type GameData = {
 const initialMoveList: Move[] = []
 
 export const initialState: GameData = {
+  gameScene: 'Menu',
+  gameMode: 'Board',
   moveList: initialMoveList,
   nextMoveStep: initialMoveList.length + 1,
   isNextTurnBlack: true,
@@ -24,13 +47,18 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
+    setGameMode(state, action: PayloadAction<GameMode>) {
+
+    },
     placeChessAt(state, action: PayloadAction<BoardPosition>) {
       const movePos = action.payload
 
+      // 检查目标位置是否空
       if (
         state.checkResult === false &&
         isPointEmpty(movePos, state.moveList)
       ) {
+        // 落子
         state.moveList.push({
           moveStep: state.nextMoveStep,
           boardX: movePos.boardX,
@@ -38,6 +66,7 @@ export const gameSlice = createSlice({
           isBlack: state.isNextTurnBlack,
         })
 
+        // 落子后判断是否有五连,是否游戏结束
         const result = checkNewFiveInGaming(current(state.moveList), true)
         if (result === false) {
           state.nextMoveStep += 1

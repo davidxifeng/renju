@@ -1,8 +1,8 @@
 import { Box, Button, Stack } from '@chakra-ui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { gameActions } from '../../store/game'
+import { gameSelector } from '../../store/selectors'
 import { uiActions } from '../../store/ui'
-import { gameSelector } from './Chess'
 
 export const ControlArea = () => {
   const dispatch = useDispatch()
